@@ -28,7 +28,12 @@ void shuffle(random_it first, random_it last, URBG &&g) {
 
     // Local struct to hide the partial shuffle function
     struct partial_shuffle {
-        __attribute__((always_inline)) static uint64_t shuffle(random_it storage, uint64_t n, uint64_t k, uint64_t bound, URBG& gen) {
+#if defined(_MSC_VER) && !defined(__clang__)
+        __forceinline
+#elif defined(__GNUC__) || defined(__clang__)
+        __attribute__((always_inline))
+#endif
+        static uint64_t shuffle(random_it storage, uint64_t n, uint64_t k, uint64_t bound, URBG& gen) {
             // Use 128-bit arithmetic to avoid overflow in random number scaling
             __uint128_t x;
             // Get a random 64-bit value from the generator
