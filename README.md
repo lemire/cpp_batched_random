@@ -17,3 +17,13 @@ cmake --build build
 ctest --test-dir build
 ./build/benchmark
 ```
+
+For Windows: 
+
+
+```
+cmake -B build
+cmake --build build --config Release
+ctest --test-dir build -C Release
+./build/Release/benchmark
+```
