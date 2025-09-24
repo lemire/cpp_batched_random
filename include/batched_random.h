@@ -12,6 +12,10 @@
 #include <type_traits>
 #include <limits>
 
+#if defined(MSVC) && !defined(__clang__)
+#include <__msvc_int128.hpp>
+#endif
+
 // This code is meant to look like the C++ standard library.
 namespace batched_random {
 
@@ -25,12 +29,16 @@ void shuffle(random_it first, random_it last, URBG &&g) {
     
     // Calculate the number of elements to shuffle
     uint64_t i = std::distance(first, last);
-
+#if defined(MSVC) && !defined(__clang__)
+    using our_uint128 = _Unsigned128;
+#else
+    using our_uint128 = __uint128_t;
+#endif
     // Local struct to hide the partial shuffle function
     struct partial_shuffle {
         __attribute__((always_inline)) static uint64_t shuffle(random_it storage, uint64_t n, uint64_t k, uint64_t bound, URBG& gen) {
             // Use 128-bit arithmetic to avoid overflow in random number scaling
-            __uint128_t x;
+            our_uint128 x;
             // Get a random 64-bit value from the generator
             uint64_t r = gen();
             // Store indices for swapping (k <= 7, so fixed-size array is safe)
@@ -38,7 +46,7 @@ void shuffle(random_it first, random_it last, URBG &&g) {
             // Generate k random indices using the division method
             for (uint64_t j = 0; j < k; j++) {
                 // Scale random number to select an index in [0, n-j)
-                x = (__uint128_t)(n - j) * (__uint128_t)r;
+                x = (our_uint128)(n - j) * (our_uint128)r;
                 r = (uint64_t)x; // Lower 64 bits for next iteration
                 indexes[j] = (uint64_t)(x >> 64); // Upper 64 bits give the index
             }
@@ -55,7 +63,7 @@ void shuffle(random_it first, random_it last, URBG &&g) {
                 while (r < t) {
                     r = gen();
                     for (uint64_t j = 0; j < k; j++) {
-                        x = (__uint128_t)(n - j) * (__uint128_t)r;
+                        x = (our_uint128)(n - j) * (our_uint128)r;
                         r = (uint64_t)x;
                         indexes[j] = (uint64_t)(x >> 64);
                     }
