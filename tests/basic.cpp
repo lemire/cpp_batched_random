@@ -1,4 +1,5 @@
 #include <array>
+#include <vector>
 #include <bitset>
 #include <iomanip>
 #include <iostream>
@@ -40,7 +41,7 @@ template <class URBG>
 bool uniformity_test(URBG &gen) {
   constexpr size_t size = 512;
   uint64_t input[size];
-  std::array<size_t, size> bits[size]{};
+  std::vector<std::vector<size_t>> bits(size, std::vector<size_t>(size, 0));
   size_t volume = size * size;
   for (size_t trial = 0; trial < volume; trial++) {
     // We always start from the same input.
@@ -56,7 +57,7 @@ bool uniformity_test(URBG &gen) {
   size_t overall_max = 0;
   size_t average = 0;
 
-  for (const std::array<size_t, size> &b : bits) {
+  for (const std::vector<size_t>&b : bits) {
     average += std::accumulate(b.begin(), b.end(), 0);
     size_t max_value = *std::max_element(b.begin(), b.end());
     size_t min_value = *std::min_element(b.begin(), b.end());

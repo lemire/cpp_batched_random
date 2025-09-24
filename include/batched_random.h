@@ -54,6 +54,7 @@ void shuffle(random_it first, random_it last, URBG &&g) {
                 x = (our_uint128)(n - j) * (our_uint128)r;
                 r = (uint64_t)x; // Lower 64 bits for next iteration
                 indexes[j] = (uint64_t)(x >> 64); // Upper 64 bits give the index
+                // We have indexes[j] < n - j by construction.
             }
             // Check for bias in random number generation
             [[unlikely]] if (r < bound) {
