@@ -12,7 +12,7 @@
 #include <type_traits>
 #include <limits>
 
-#if defined(MSVC) && !defined(__clang__)
+#if defined(_MSC_VER) && !defined(__clang__)
 #include <__msvc_int128.hpp>
 #endif
 
@@ -29,14 +29,14 @@ void shuffle(random_it first, random_it last, URBG &&g) {
     
     // Calculate the number of elements to shuffle
     uint64_t i = std::distance(first, last);
-#if defined(MSVC) && !defined(__clang__)
-    using our_uint128 = _Unsigned128;
+#if defined(_MSC_VER) && !defined(__clang__)
+    using our_uint128 = std::_Unsigned128;
 #else
     using our_uint128 = __uint128_t;
 #endif
     // Local struct to hide the partial shuffle function
     struct partial_shuffle {
-#if defined(_MSC_VER) && !defined(__clang__)
+#if defined(_MSC_VER ) && !defined(__clang__)
         __forceinline
 #elif defined(__GNUC__) || defined(__clang__)
         __attribute__((always_inline))
