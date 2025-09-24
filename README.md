@@ -1,5 +1,8 @@
 ## C++ Batched Random
 
+[![VS17-CI](https://github.com/lemire/cpp_batched_random/actions/workflows/vs-ci.yml/badge.svg)](https://github.com/lemire/cpp_batched_random/actions/workflows/vs-ci.yml)
+[![Ubuntu CI](https://github.com/lemire/cpp_batched_random/actions/workflows/ubuntu-ci.yml/badge.svg)](https://github.com/lemire/cpp_batched_random/actions/workflows/ubuntu-ci.yml)
+
 Fast shuffling functions using batched random index generation.
 
 
