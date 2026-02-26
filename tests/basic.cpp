@@ -192,6 +192,30 @@ bool test_any_possible_pair_at_the_end(const std::string &gen_name, URBG &gen) {
   return true;
 }
 
+bool test_consecutive_shuffles_different() {
+  std::cout << __FUNCTION__ << std::endl;
+  std::cout << std::setw(40) << "consecutive shuffles: ";
+  std::cout.flush();
+
+  std::mt19937_64 urng(6);
+  std::vector<int> v(100);
+
+  std::iota(v.begin(), v.end(), 0);
+  batched_random::shuffle(v.begin(), v.end(), urng);
+  const auto first_shuffle = v;
+
+  std::iota(v.begin(), v.end(), 0);
+  batched_random::shuffle(v.begin(), v.end(), urng);
+
+  if (v == first_shuffle) {
+    std::cerr << "!!!Test failed: First and Second Shuffles were identical, this should be vanishingly impossible!" << std::endl;
+    return false;
+  } else {
+    std::cout << "passed" << std::endl;
+    return true;
+  }
+}
+
 int main() {
   std::random_device rd;
   std::mt19937_64 mtGenerator{rd()};
@@ -202,6 +226,7 @@ int main() {
   success &= test_any_possible_pair_at_the_end("mt19937_64", mtGenerator);
   success &= test_any_possible_pair_at_the_start("mt19937_64", mtGenerator);
   success &= test_everyone_can_move_everywhere("mt19937_64", mtGenerator);
+  success &= test_consecutive_shuffles_different();
 
   if (success) {
     std::cout << "All tests passed" << std::endl;
