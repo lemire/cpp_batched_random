@@ -15,6 +15,10 @@ This project contains a single header `batched_random.h`. It defines a single te
 
 * Nevin Brackett-Rozinsky, Daniel Lemire, [Batched Ranged Random Integer Generation](https://arxiv.org/abs/2408.06213), Software: Practice and Experience 55 (1), 2024.
 
+### License
+
+This project is dual-licensed under the MIT License (see LICENSE) and the Apache License 2.0 with LLVM Exception (see LICENSE-APACHE).
+
 ### Usage
 
 For Linux and macOS: 
