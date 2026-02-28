@@ -197,23 +197,24 @@ bool test_consecutive_shuffles_different() {
   std::cout << std::setw(40) << "consecutive shuffles: ";
   std::cout.flush();
 
-  std::mt19937_64 urng(6);
-  std::vector<int> v(100);
+  for (int trial = 0; trial < 1000; ++trial) {
+    std::mt19937_64 urng(6);
+    std::vector<int> v(100);
 
-  std::iota(v.begin(), v.end(), 0);
-  batched_random::shuffle(v.begin(), v.end(), urng);
-  const auto first_shuffle = v;
+    std::iota(v.begin(), v.end(), 0);
+    batched_random::shuffle(v.begin(), v.end(), urng);
+    const std::vector<int> first_shuffle = v;
 
-  std::iota(v.begin(), v.end(), 0);
-  batched_random::shuffle(v.begin(), v.end(), urng);
+    std::iota(v.begin(), v.end(), 0);
+    batched_random::shuffle(v.begin(), v.end(), urng);
 
-  if (v == first_shuffle) {
-    std::cerr << "!!!Test failed: First and Second Shuffles were identical, this should be vanishingly impossible!" << std::endl;
-    return false;
-  } else {
-    std::cout << "passed" << std::endl;
-    return true;
+    if (v == first_shuffle) {
+      std::cerr << "!!!Test failed: First and Second Shuffles were identical on trial " << trial << ", this should be vanishingly impossible!" << std::endl;
+      return false;
+    }
   }
+  std::cout << "passed" << std::endl;
+  return true;
 }
 
 int main() {
